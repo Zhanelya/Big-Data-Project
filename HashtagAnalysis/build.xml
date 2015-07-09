@@ -1,0 +1,49 @@
+<project name="HashtagAnalysis" default="dist" basedir=".">
+	<description>
+        Sample MapReduce project build file
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="classes" />
+	<property name="dist" location="dist" />
+
+	<!--<property name="hadoop.version" value="2.0.0-mr1-cdh4.1.2" /> -->
+	<property name="hadoop.base.path" value="/usr/lib/hadoop/client/" />
+
+
+	<path id="classpath">
+		<fileset dir="${hadoop.base.path}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<property name="myclasspath" refid="classpath"/>
+		<echo message="Classpath = ${myclasspath}"/>
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath  refid="classpath"/>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+
+		<!-- Put everything in ${build} into a jar file -->
+		<jar jarfile="${dist}/HashtagAnalysis.jar" basedir="${build}" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+</project>
